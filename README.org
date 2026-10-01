@@ -1,0 +1,37 @@
+* Magit fast
+
+Magit fast is [[https://github.com/magit/magit][magit]] fast version.
+No heavy diff overhead, while also reducing Git invocations.
+
+* Installion
+
+#+begin_src emacs-lisp
+;; you can use this magit config
+(use-package magit
+  :custom
+  (magit-log-section-commit-count 5)
+  (magit-process-connection-type nil)
+  (magit-refresh-verbose nil)
+  (magit-refresh-status-buffer nil)
+  (magit-revision-insert-related-refs nil)
+  (magit-save-repository-buffers nil)
+  (magit-uniquify-buffer-names nil)
+  (magit-status-sections-hook
+   '(magit-insert-error-header
+     magit-insert-untracked-files
+     magit-insert-unstaged-changes
+     magit-insert-staged-changes
+     magit-insert-recent-commits)))
+
+;; use package-vc installion
+(use-package magit-fast
+  :vc (:url "https://github.com/zHaOdANiuu/magit-fast" :rev :newest)
+  :after magit
+  :init
+  (magit-auto-revert-mode -1)
+  (setq with-editor-emacsclient-executable (executable-find "emacsclient"))
+  :config
+  (remove-hook 'server-switch-hook 'magit-commit-diff)
+  (remove-hook 'magit-pre-start-git-hook #'magit-maybe-save-repository-buffers)
+  (magit-fast-mode))
+#+end_src
