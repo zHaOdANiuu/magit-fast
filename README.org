@@ -27,10 +27,10 @@ No heavy diff overhead, while also reducing Git invocations.
 (use-package magit-fast
   :vc (:url "https://github.com/zHaOdANiuu/magit-fast" :rev :newest)
   :init
+  (magit-auto-revert-mode -1)
   (setq with-editor-emacsclient-executable (executable-find "emacsclient"))
   (with-eval-after-load 'magit
     (remove-hook 'server-switch-hook 'magit-commit-diff)
     (remove-hook 'magit-pre-start-git-hook #'magit-maybe-save-repository-buffers)
-    (magit-auto-revert-mode -1)
     (magit-fast-mode)))
 #+end_src
