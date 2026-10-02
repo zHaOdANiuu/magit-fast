@@ -5,7 +5,7 @@
 ;; Author: zhaodaniu <zhaodaniu1@gmail.com>
 ;; Homepage: https://github.com/zHaOdANiuu/magit-fast
 ;; Version: 1.0.0
-;; Package-Requires: ((emacs "29.1"))
+;; Package-Requires: ((emacs "28.1") (magit "3.0.0"))
 ;; Keywords: magit-fast, fast, vc
 
 ;; This file is not part of GNU Emacs.
@@ -35,6 +35,8 @@
 ;; Customize with `M-x customize-group RET magit-fast RET'.
 
 ;;; Code:
+
+(require 'magit)
 
 (defvar magit-fast--porcelain-cache nil
   "Cached parsed output of `git status --porcelain'.
