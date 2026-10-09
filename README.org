@@ -1,13 +1,16 @@
 * Magit fast
 
-Magit fast is [[https://github.com/magit/magit][magit]] fast version.
-No heavy diff overhead, while also reducing Git invocations.
+  Magit fast is based on Magit and makes Magit faster.
+  No heavy diff overhead, while also reducing Git invocations.
 
 * Installion
 
 #+begin_src emacs-lisp
 ;; you can use this magit config
 (use-package magit
+  :init
+  (magit-auto-revert-mode -1)
+  (setq with-editor-emacsclient-executable (executable-find "emacsclient"))
   :custom
   (magit-log-section-commit-count 5)
   (magit-process-connection-type nil)
@@ -26,11 +29,17 @@ No heavy diff overhead, while also reducing Git invocations.
 ;; use package-vc installion
 (use-package magit-fast
   :vc (:url "https://github.com/zHaOdANiuu/magit-fast" :rev :newest)
+  :after magit
+  :bind
+  (:map magit-status-mode-map
+   ("<return>" . my-magit-fast-diff))
   :init
-  (magit-auto-revert-mode -1)
-  (setq with-editor-emacsclient-executable (executable-find "emacsclient"))
-  (with-eval-after-load 'magit
-    (remove-hook 'server-switch-hook 'magit-commit-diff)
-    (remove-hook 'magit-pre-start-git-hook #'magit-maybe-save-repository-buffers)
-    (magit-fast-mode)))
+  (remove-hook 'server-switch-hook 'magit-commit-diff)
+  (remove-hook 'magit-pre-start-git-hook #'magit-maybe-save-repository-buffers)
+  (magit-fast-mode)
+
+  (defun my-magit-fast-diff ()
+    (interactive)
+    (when-let* ((file (magit-file-at-point)))
+      (magit-diff-dwim nil `(,file)))))
 #+end_src
